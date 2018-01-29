@@ -6,8 +6,8 @@ class DigestHashTest < Minitest::Test
     hash_a = { hello: 'world', goodbye: 'moon' }
     hash_b = { hello: :world, goodbye: :moon }
 
-    digest_a = DigestHash.(hash_a)
-    digest_b = DigestHash.(hash_b)
+    digest_a = DigestHash.call(hash_a)
+    digest_b = DigestHash.call(hash_b)
 
     assert_equal digest_a, digest_b
   end
@@ -16,8 +16,8 @@ class DigestHashTest < Minitest::Test
     hash_a = { hello: 'world', goodbye: [1, 2, 3] }
     hash_b = { hello: 'world', goodbye: [3, 2, 1] }
 
-    digest_a = DigestHash.(hash_a)
-    digest_b = DigestHash.(hash_b)
+    digest_a = DigestHash.call(hash_a)
+    digest_b = DigestHash.call(hash_b)
 
     assert_equal digest_a, digest_b
   end
@@ -26,8 +26,28 @@ class DigestHashTest < Minitest::Test
     hash_a = { hello: '', goodbye: [1, 2, 3] }
     hash_b = { hello: [], goodbye: [3, 2, 1] }
 
-    digest_a = DigestHash.(hash_a)
-    digest_b = DigestHash.(hash_b)
+    digest_a = DigestHash.call(hash_a)
+    digest_b = DigestHash.call(hash_b)
+
+    assert_equal digest_a, digest_b
+  end
+
+  def test_works_with_numbers
+    hash_a = { hello: 1, goodbye: '2' }
+    hash_b = { hello: '1', goodbye: 2 }
+
+    digest_a = DigestHash.call(hash_a)
+    digest_b = DigestHash.call(hash_b)
+
+    assert_equal digest_a, digest_b
+  end
+
+  def test_works_with_hashes
+    hash_a = { hello: { taco: 'tuesday', nacho: 'wednesday' } }
+    hash_b = { hello: { 'taco' => 'tuesday', nacho: 'wednesday' } }
+
+    digest_a = DigestHash.call(hash_a)
+    digest_b = DigestHash.call(hash_b)
 
     assert_equal digest_a, digest_b
   end

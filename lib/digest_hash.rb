@@ -24,21 +24,23 @@ class DigestHash
   end
 
   def remove_nulls
-    @cleaned_params = @cleaned_params.to_h.delete_if { |_, v| v.nil? || v.empty? }
+    @cleaned_params = @cleaned_params.to_h.delete_if do |_, val|
+      val.nil? || val.try(:empty?)
+    end
   end
 
   def deeply_sort_and_stringify_values
-    @cleaned_params = @cleaned_params.deep_merge(@cleaned_params) do |_, _, v|
-      if v.kind_of? Array
-        v.sort.to_s
+    @cleaned_params = @cleaned_params.deep_merge(@cleaned_params) do |_, _, val|
+      if val.is_a? Array
+        val.sort.to_s
       else
-        v.to_s
+        val.to_s
       end
     end
   end
 
   def stringify_keys
-    @cleaned_params = @cleaned_params.stringify_keys
+    @cleaned_params = @cleaned_params.deep_stringify_keys
   end
 
   def sort_and_stringify_hash
